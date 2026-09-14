@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Harvest Moon Cafe and Restaurant, Ahangama — Sri Lankan food, coffee, fresh juices and homemade favourites.">
+  <meta name="theme-color" content="#12372d">
+  <title>Harvest Moon Cafe and Restaurant — Ahangama</title>
+
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=2BhztNumxzxccsPVveIfVXaTUGas2pO3bnQIJF4WurPFPo2vAn2G_vNe3tZj3rWeZbU5_XgSTZwl9gvwev7qSJ99HYeBLwCtGVmwl1uuORdiR3CRa03avq6VAk0sIt4SimIqCdv309RB1cU1w16hyfujyouiLs5AdcIjeFkx2X3Gp78vUL4Rr7h6xDwqH7zyqlzBDG7dc-0FbCAri_PnWMC4HAnzODUG7rZ93_DJ7W0H9nTfDbUlJ6cEQVaABoq9wGG6iTMQXBcgs1Kg7lZUrk942DAIIqgtH2A2pgaUFT2dQD807PUVL8duH9gNlP2Cx61l_3JoISW_h1GV3qCY0gyAZUbS9eB5k1DEpgVSMP4" charset="UTF-8"></script><script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: '#12372d',
+            leaf: '#2e6950',
+            cream: '#f7f1e3',
+            gold: '#e6a63a',
+            ink: '#17231e',
+            soft: '#fbfaf6'
+          },
+          fontFamily: {
+            display: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['DM Sans', 'Arial', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 18px 55px rgba(18,55,45,.12)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', Arial, sans-serif; background:#fbfaf6; }
+    .display { font-family:'Playfair Display', Georgia, serif; }
+    .hero-overlay { background:linear-gradient(90deg,rgba(5,27,20,.82),rgba(5,27,20,.48) 48%,rgba(5,27,20,.08)); }
+    .grain { background-image:radial-gradient(rgba(18,55,45,.055) 1px,transparent 1px); background-size:7px 7px; }
+    .menu-modal { opacity:0; visibility:hidden; transition:.25s ease; }
+    .menu-modal.open { opacity:1; visibility:visible; }
+    .menu-panel { transform:translateY(22px) scale(.985); transition:.25s ease; }
+    .menu-modal.open .menu-panel { transform:translateY(0) scale(1); }
+    .tab.active { background:#12372d; color:#fff; box-shadow:0 8px 24px rgba(18,55,45,.16); }
+    .menu-card { transition:transform .2s ease, box-shadow .2s ease; }
+    .menu-card:hover { transform:translateY(-3px); box-shadow:0 16px 35px rgba(18,55,45,.10); }
+    .item-photo { aspect-ratio: 4/3; object-fit:cover; }
+    .hide-scrollbar::-webkit-scrollbar { display:none; }
+    .hide-scrollbar { scrollbar-width:none; }
+  </style>
+</head>
+
+<body class="text-ink antialiased">
+
+<header class="fixed inset-x-0 top-0 z-40 bg-forest/95 text-white backdrop-blur border-b border-white/10">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+    <a href="#top" class="flex items-center gap-3">
+      <div class="grid h-11 w-11 place-items-center rounded-full border border-white/25 text-xs font-bold tracking-widest">HM</div>
+      <div>
+        <div class="display text-xl leading-none">Harvest Moon</div>
+        <div class="mt-1 text-[9px] uppercase tracking-[.28em] text-white/55">Cafe and Restaurant</div>
+      </div>
+    </a>
+
+    <nav class="hidden items-center gap-7 text-sm text-white/80 md:flex">
+      <button onclick="openMenu()" class="hover:text-white font-semibold">Menu</button>
+      <a href="#story" class="hover:text-white">Our Story</a>
+      <a href="#gallery" class="hover:text-white">Gallery</a>
+      <a href="#visit" class="hover:text-white">Visit</a>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="tel:+94768025241" class="hidden rounded-full bg-gold px-5 py-2.5 text-sm font-bold text-forest sm:inline-flex">Call / WhatsApp</a>
+      <button onclick="toggleMobile()" class="rounded-xl border border-white/20 p-2 md:hidden" aria-label="Open navigation">☰</button>
+    </div>
+  </div>
+
+  <div id="mobileNav" class="hidden border-t border-white/10 bg-forest px-5 pb-5 md:hidden">
+    <div class="grid gap-3 pt-4 text-sm">
+      <button onclick="openMenu()" class="text-left font-semibold">View Menu</button>
+      <a href="#story">Our Story</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#visit">Visit</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="relative min-h-[88vh] overflow-hidden bg-forest">
+    <img
+      src="https://images.unsplash.com/photo-1743674453123-93356ade2891?auto=format&fit=crop&fm=jpg&q=82&w=2200"
+      alt="Sri Lankan rice and curry in Mirissa"
+      class="absolute inset-0 h-full w-full object-cover"
+    >
+    <div class="hero-overlay absolute inset-0"></div>
+
+    <div class="relative mx-auto flex min-h-[88vh] max-w-7xl items-end px-5 pb-16 pt-36 lg:px-8 lg:pb-24">
+      <div class="max-w-3xl text-white">
+        <div class="mb-5 inline-flex rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[.28em]">
+          Ahangama • Sri Lankan Food • Cafe
+        </div>
+        <h1 class="display text-5xl font-semibold leading-[.94] sm:text-6xl lg:text-8xl">
+          Good food.<br><span class="text-gold">Good vibes.</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-base leading-7 text-white/80 sm:text-lg">
+          Welcome to Harvest Moon Cafe and Restaurant — a warm, family-run place behind the police station in Ahangama, serving homemade Sri Lankan favourites, coffee, fresh juices and easy comfort food.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <button onclick="openMenu()" class="inline-flex items-center justify-center rounded-full bg-gold px-7 py-3.5 font-bold text-forest hover:-translate-y-0.5 transition">
+            Explore Our Menu
+          </button>
+          <a href="#visit" class="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-7 py-3.5 font-bold text-white hover:bg-white/15 transition">
+            Find Harvest Moon
+          </a>
+        </div>
+
+        <div class="mt-10 flex flex-wrap gap-5 border-t border-white/15 pt-5 text-xs text-white/65">
+          <span>✓ Free Wi-Fi</span>
+          <span>✓ Toilet available</span>
+          <span>✓ Free parking</span>
+          <span>✓ Laundry service</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK INFO -->
+  <section class="border-b border-forest/10 bg-cream">
+    <div class="mx-auto grid max-w-7xl gap-0 px-5 py-5 sm:grid-cols-3 lg:px-8">
+      <div class="py-3 sm:border-r sm:border-forest/10 sm:pr-7">
+        <p class="text-[10px] uppercase tracking-[.22em] text-forest/45">Location</p>
+        <p class="mt-1 font-semibold">Behind the police station, Ahangama</p>
+      </div>
+      <div class="py-3 sm:px-7">
+        <p class="text-[10px] uppercase tracking-[.22em] text-forest/45">Call / WhatsApp</p>
+        <a class="mt-1 block font-semibold hover:underline" href="tel:+94768025241">076 802 5241</a>
+      </div>
+      <div class="py-3 sm:border-l sm:border-forest/10 sm:pl-7">
+        <p class="text-[10px] uppercase tracking-[.22em] text-forest/45">Experience</p>
+        <p class="mt-1 font-semibold">Sri Lankan home-style food & warm service</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU HIGHLIGHT -->
+  <section id="menu" class="grain px-5 py-20 lg:px-8 lg:py-28">
+    <div class="mx-auto max-w-7xl">
+      <div class="grid gap-10 lg:grid-cols-[1fr_.85fr] lg:items-end">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[.25em] text-leaf">Our menu</p>
+          <h2 class="display mt-3 text-4xl leading-tight text-forest sm:text-5xl lg:text-6xl">
+            Sri Lankan favourites,<br>coffee & fresh drinks.
+          </h2>
+          <p class="mt-5 max-w-2xl leading-7 text-ink/65">
+            We have reorganised the menu so visitors can understand it at a glance. Click the button below to browse the categories exactly around the menu you provided.
+          </p>
+        </div>
+
+        <div class="rounded-[2rem] bg-forest p-7 text-white shadow-soft">
+          <p class="text-xs font-bold uppercase tracking-[.22em] text-gold">Easy menu browsing</p>
+          <p class="mt-3 display text-3xl">Choose a category → see the dishes</p>
+          <button onclick="openMenu()" class="mt-6 rounded-full bg-gold px-6 py-3 font-bold text-forest">
+            Open Full Menu
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <button onclick="openMenu('traditional')" class="menu-card overflow-hidden rounded-3xl bg-white text-left shadow-soft">
+          <img class="item-photo w-full" src="https://images.unsplash.com/photo-1743674453123-93356ade2891?auto=format&fit=crop&q=82&w=900" alt="Sri Lankan rice and curry">
+          <div class="p-5"><p class="text-[10px] font-bold uppercase tracking-[.2em] text-gold">01</p><h3 class="display mt-2 text-2xl text-forest">Traditional</h3><p class="mt-2 text-sm text-ink/60">Rice & curry, hoppers, pittu and roti.</p></div>
+        </button>
+
+        <button onclick="openMenu('kottu')" class="menu-card overflow-hidden rounded-3xl bg-white text-left shadow-soft">
+          <img class="item-photo w-full" src="https://images.unsplash.com/photo-1709926746119-eb84081ac78e?auto=format&fit=crop&q=82&w=900" alt="Sri Lankan savoury food">
+          <div class="p-5"><p class="text-[10px] font-bold uppercase tracking-[.2em] text-gold">02</p><h3 class="display mt-2 text-2xl text-forest">Kottu & Fried Rice</h3><p class="mt-2 text-sm text-ink/60">Comfort food for lunch or dinner.</p></div>
+        </button>
+
+        <button onclick="openMenu('pasta')" class="menu-card overflow-hidden rounded-3xl bg-white text-left shadow-soft">
+          <img class="item-photo w-full" src="https://images.unsplash.com/photo-1709926729230-fbbd9ddcde5b?auto=format&fit=crop&q=82&w=900" alt="Sri Lankan cafe food table">
+          <div class="p-5"><p class="text-[10px] font-bold uppercase tracking-[.2em] text-gold">03</p><h3 class="display mt-2 text-2xl text-forest">Pasta & Noodles</h3><p class="mt-2 text-sm text-ink/60">Chicken pasta, noodles and ramen.</p></div>
+        </button>
+
+        <button onclick="openMenu('drinks')" class="menu-card overflow-hidden rounded-3xl bg-white text-left shadow-soft">
+          <img class="item-photo w-full" src="https://images.unsplash.com/photo-1743947064090-42a0c657fbdc?auto=format&fit=crop&q=82&w=900" alt="King coconuts from Sri Lanka">
+          <div class="p-5"><p class="text-[10px] font-bold uppercase tracking-[.2em] text-gold">04</p><h3 class="display mt-2 text-2xl text-forest">Coffee & Drinks</h3><p class="mt-2 text-sm text-ink/60">Coffee, juices, lassis, tea and specials.</p></div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="story" class="border-y border-forest/10 bg-cream px-5 py-20 lg:px-8 lg:py-28">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+      <div class="overflow-hidden rounded-[2rem] shadow-soft">
+        <img src="https://images.unsplash.com/photo-1709926729230-fbbd9ddcde5b?auto=format&fit=crop&q=85&w=1400" alt="Sri Lankan food served in Colombo" class="h-[500px] w-full object-cover">
+      </div>
+      <div class="max-w-xl">
+        <p class="text-xs font-bold uppercase tracking-[.25em] text-leaf">Our story</p>
+        <h2 class="display mt-3 text-4xl leading-tight text-forest sm:text-5xl">A small family place with a big welcome.</h2>
+        <p class="mt-6 leading-7 text-ink/65">
+          Harvest Moon is about simple food, friendly service and the feeling of eating somewhere local. Our menu brings together traditional Sri Lankan dishes with café favourites, fresh drinks and homemade sweets.
+        </p>
+        <div class="mt-8 grid gap-5 sm:grid-cols-3">
+          <div><p class="display text-3xl text-forest">Fresh</p><p class="mt-1 text-xs uppercase tracking-widest text-ink/45">Local flavours</p></div>
+          <div><p class="display text-3xl text-forest">Warm</p><p class="mt-1 text-xs uppercase tracking-widest text-ink/45">Family service</p></div>
+          <div><p class="display text-3xl text-forest">Easy</p><p class="mt-1 text-xs uppercase tracking-widest text-ink/45">Relaxed dining</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="px-5 py-20 lg:px-8 lg:py-28">
+    <div class="mx-auto max-w-7xl">
+      <p class="text-xs font-bold uppercase tracking-[.25em] text-leaf">The Harvest Moon feeling</p>
+      <h2 class="display mt-3 max-w-3xl text-4xl text-forest sm:text-5xl">A taste of Sri Lanka, from the South Coast.</h2>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2">
+        <img class="h-80 w-full rounded-3xl object-cover sm:h-[28rem] lg:col-span-7 lg:row-span-2 lg:h-[37rem]" src="https://images.unsplash.com/photo-1743674453123-93356ade2891?auto=format&fit=crop&q=82&w=1600" alt="Sri Lankan rice and curry from Mirissa">
+        <img class="h-64 w-full rounded-3xl object-cover lg:col-span-5" src="https://images.unsplash.com/photo-1709926746119-eb84081ac78e?auto=format&fit=crop&q=82&w=1200" alt="Sri Lankan savoury food">
+        <img class="h-64 w-full rounded-3xl object-cover lg:col-span-5" src="https://images.unsplash.com/photo-1709926729230-fbbd9ddcde5b?auto=format&fit=crop&q=82&w=1200" alt="Sri Lankan food and tea table">
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT -->
+  <section id="visit" class="bg-forest px-5 py-20 text-white lg:px-8 lg:py-24">
+    <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_.9fr]">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[.25em] text-gold">Visit Harvest Moon</p>
+        <h2 class="display mt-3 text-4xl sm:text-5xl">Come hungry.<br>Leave happy.</h2>
+        <p class="mt-5 max-w-xl leading-7 text-white/65">
+          Behind the police station in Ahangama. Call or WhatsApp before visiting for the latest opening information.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="tel:+94768025241" class="rounded-full bg-gold px-6 py-3 font-bold text-forest">076 802 5241</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Harvest%20Moon%20Cafe%20and%20Restaurant%20Ahangama" target="_blank" rel="noopener" class="rounded-full border border-white/20 px-6 py-3 font-bold text-white">Open in Google Maps ↗</a>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] bg-white/10 p-8 ring-1 ring-white/10 sm:p-10">
+        <div class="grid gap-7 sm:grid-cols-2">
+          <div>
+            <p class="text-xs uppercase tracking-[.2em] text-white/45">Address</p>
+            <p class="mt-2 font-semibold leading-6">Behind the police station<br>Ahangama, Sri Lanka</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[.2em] text-white/45">Facilities</p>
+            <p class="mt-2 font-semibold leading-6">Free Wi-Fi<br>Toilet • Parking</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="bg-[#0b2820] px-5 py-12 text-white lg:px-8">
+  <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.4fr_.8fr_.8fr]">
+    <div>
+      <div class="display text-2xl">Harvest Moon</div>
+      <p class="mt-2 text-xs uppercase tracking-[.24em] text-white/40">Cafe and Restaurant • Ahangama</p>
+      <p class="mt-5 max-w-sm text-sm leading-6 text-white/55">Sri Lankan food, homemade favourites, coffee and fresh drinks behind the police station.</p>
+    </div>
+    <div>
+      <p class="text-xs font-bold uppercase tracking-[.2em] text-gold">Navigate</p>
+      <div class="mt-4 grid gap-2 text-sm text-white/65">
+        <button onclick="openMenu()" class="text-left hover:text-white">Menu</button>
+        <a href="#story" class="hover:text-white">Our Story</a>
+        <a href="#gallery" class="hover:text-white">Gallery</a>
+        <a href="#visit" class="hover:text-white">Visit</a>
+      </div>
+    </div>
+    <div>
+      <p class="text-xs font-bold uppercase tracking-[.2em] text-gold">Contact</p>
+      <div class="mt-4 grid gap-2 text-sm text-white/65">
+        <a href="tel:+94768025241" class="hover:text-white">076 802 5241</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Harvest%20Moon%20Cafe%20and%20Restaurant%20Ahangama" target="_blank" rel="noopener" class="hover:text-white">Google Maps ↗</a>
+      </div>
+    </div>
+  </div>
+  <div class="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-5 text-center text-xs text-white/30">© <span id="year"></span> Harvest Moon Cafe and Restaurant.</div>
+</footer>
+
+<!-- FULL MENU MODAL -->
+<div id="menuModal" class="menu-modal fixed inset-0 z-[80] bg-[#071c16]/75 p-3 backdrop-blur-sm sm:p-6" onclick="backdropClose(event)">
+  <div class="menu-panel mx-auto flex h-full max-w-6xl flex-col overflow-hidden rounded-[2rem] bg-soft shadow-2xl">
+    <div class="flex items-center justify-between border-b border-forest/10 px-5 py-4 sm:px-7">
+      <div>
+        <p class="text-[10px] font-bold uppercase tracking-[.24em] text-leaf">Harvest Moon</p>
+        <h2 class="display text-2xl text-forest sm:text-3xl">Food & Drinks Menu</h2>
+      </div>
+      <button onclick="closeMenu()" class="grid h-10 w-10 place-items-center rounded-full bg-cream text-forest text-xl" aria-label="Close menu">×</button>
+    </div>
+
+    <div class="hide-scrollbar flex gap-2 overflow-x-auto border-b border-forest/10 bg-white px-5 py-3 sm:px-7">
+      <button class="tab active shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="traditional" onclick="showCategory('traditional')">Traditional</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="sweets" onclick="showCategory('sweets')">Sweets</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="kottu" onclick="showCategory('kottu')">Kottu & Fried Rice</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="pasta" onclick="showCategory('pasta')">Pasta & Noodles</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="omelets" onclick="showCategory('omelets')">Omelets</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="soups" onclick="showCategory('soups')">Soups</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="drinks" onclick="showCategory('drinks')">Drinks</button>
+      <button class="tab shrink-0 rounded-full px-4 py-2 text-xs font-bold" data-cat="special" onclick="showCategory('special')">Special Drinks</button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-6 sm:px-7 sm:py-8">
+      <div id="menuContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const IMG = {
+  rice: 'https://images.unsplash.com/photo-1743674453123-93356ade2891?auto=format&fit=crop&q=82&w=1000',
+  savoury: 'https://images.unsplash.com/photo-1709926746119-eb84081ac78e?auto=format&fit=crop&q=82&w=1000',
+  table: 'https://images.unsplash.com/photo-1709926729230-fbbd9ddcde5b?auto=format&fit=crop&q=82&w=1000',
+  coconut: 'https://images.unsplash.com/photo-1743947064090-42a0c657fbdc?auto=format&fit=crop&q=82&w=1000',
+  sweets: 'https://images.unsplash.com/photo-1709926729230-fbbd9ddcde5b?auto=format&fit=crop&q=82&w=1000'
+};
+
+const menus = {
+  traditional: {
+    title:'Home Made Traditional',
+    subtitle:'Sri Lankan comfort food',
+    image:IMG.rice,
+    items:[
+      ['Rice and Curry Vegan — Rice with 5 Curries','LKR 1,200'],
+      ['String Hoppers with Dhal & Coconut Sambal (15)','LKR 800'],
+      ['Pittu with Kirihodi (2)','LKR 800'],
+      ['Coconut Roti with Dhal & Onion Sambal (2)','LKR 700'],
+      ['Avocado Guacamole','LKR 700'],
+      ['Chicken Curry','LKR 400'],
+      ['Fish Curry','LKR 400']
+    ]
+  },
+  sweets: {
+    title:'Home Made Sweets',
+    subtitle:'Simple homemade treats',
+    image:IMG.sweets,
+    items:[
+      ['Coconut Pan Cake (1)','LKR 200'],
+      ['Pan Cake (2)','LKR 400'],
+      ['Pan Cake with Banana (2)','LKR 500'],
+      ['Chocolate Roti (1)','LKR 200']
+    ]
+  },
+  kottu: {
+    title:'Kottu & Fried Rice',
+    subtitle:'Sri Lankan favourites',
+    image:IMG.savoury,
+    items:[
+      ['Kottu Vegetable','LKR 800'],
+      ['Kottu Egg','LKR 900'],
+      ['Kottu Chicken','LKR 1,000'],
+      ['Fried Rice Vegetable','LKR 800'],
+      ['Fried Rice Egg','LKR 900'],
+      ['Fried Rice Chicken','LKR 1,000']
+    ]
+  },
+  pasta: {
+    title:'Pasta & Noodles',
+    subtitle:'Comfort food with a café touch',
+    image:IMG.table,
+    items:[
+      ['Chicken Pasta','LKR 1,000'],
+      ['Cheese Chicken Pasta','LKR 1,600'],
+      ['Chicken Noodles','LKR 1,000'],
+      ['Ramen Vegetable','LKR 800'],
+      ['Ramen Egg','LKR 900'],
+      ['Ramen Chicken','LKR 1,000'],
+      ['Ramen Cheese Chicken','LKR 1,000']
+    ]
+  },
+  omelets: {
+    title:'Omelets',
+    subtitle:'Freshly prepared',
+    image:IMG.table,
+    items:[
+      ['Fried Eggs (2)','LKR 400'],
+      ['Boiled Eggs (2)','LKR 400'],
+      ['Scramble Eggs (3)','LKR 600'],
+      ['Vegetable Omelet (3)','LKR 600'],
+      ['Sri Lankan Spicy Omelet (3)','LKR 600'],
+      ['Tomato Onion Green Chilli Omelet','LKR 600']
+    ]
+  },
+  soups: {
+    title:'Soups',
+    subtitle:'Warm and comforting',
+    image:IMG.savoury,
+    items:[
+      ['Chicken Soup','LKR 600'],
+      ['Vegetable Soup','LKR 400']
+    ]
+  },
+  drinks: {
+    title:'Coffee, Tea, Juices & Lassis',
+    subtitle:'Fresh drinks for slow mornings and sunny afternoons',
+    image:IMG.coconut,
+    items:[
+      ['Hand Made Cappuccino','LKR 650'],
+      ['Hand Made Latte','LKR 650'],
+      ['Flat White','LKR 650'],
+      ['Sri Lankan Tea / Milk Tea','LKR 350'],
+      ['Mango Juice','LKR 650'],
+      ['Passion Fruit Juice','LKR 650'],
+      ['Avocado Juice','LKR 650'],
+      ['Papaya Juice','LKR 650'],
+      ['Watermelon Juice','LKR 650'],
+      ['Banana Juice','LKR 650'],
+      ['Pineapple Juice','LKR 650'],
+      ['Lime and Slot','LKR 350'],
+      ['Mango Lassi','LKR 850'],
+      ['Passion Fruit Lassi','LKR 850'],
+      ['Avocado Lassi','LKR 850'],
+      ['Papaya Lassi','LKR 850'],
+      ['Watermelon Lassi','LKR 850'],
+      ['Banana Lassi','LKR 850'],
+      ['Pineapple Lassi','LKR 850'],
+      ['Hibiscus Tea','LKR 350'],
+      ['Blue Butterfly Tea','LKR 350'],
+      ['Cinnamon Tea','LKR 350']
+    ]
+  },
+  special: {
+    title:'Special Drinks',
+    subtitle:'Refreshing island-style favourites',
+    image:IMG.coconut,
+    items:[
+      ['Fresh Lemonade','LKR 500'],
+      ['Iced Coffee','LKR 650'],
+      ['Iced Tea (Peach / Lemon)','LKR 550'],
+      ['Coconut Water','LKR 500'],
+      ['King Coconut','LKR 650'],
+      ['Faluda','LKR 750'],
+      ['Milk Shake (Vanilla / Chocolate / Strawberry)','LKR 750']
+    ]
+  }
+};
+
+function showCategory(cat='traditional'){
+  const data = menus[cat];
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  const content = document.getElementById('menuContent');
+
+  const cards = data.items.map((item,i)=>`
+    <div class="menu-card rounded-2xl border border-forest/10 bg-white p-4">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-[.16em] text-leaf">Item ${String(i+1).padStart(2,'0')}</p>
+          <h3 class="mt-2 text-sm font-semibold leading-6 text-forest">${item[0]}</h3>
+        </div>
+        <span class="shrink-0 rounded-full bg-cream px-3 py-1.5 text-xs font-bold text-forest">${item[1]}</span>
+      </div>
+    </div>`).join('');
+
+  content.innerHTML = `
+    <div class="grid gap-7 lg:grid-cols-[.7fr_1.3fr] lg:items-start">
+      <div class="overflow-hidden rounded-[1.7rem] bg-forest">
+        <img src="${data.image}" alt="${data.title}" class="h-64 w-full object-cover lg:h-80">
+        <div class="p-6 text-white">
+          <p class="text-[10px] font-bold uppercase tracking-[.22em] text-gold">${data.subtitle}</p>
+          <h3 class="display mt-2 text-3xl">${data.title}</h3>
+          <p class="mt-3 text-sm leading-6 text-white/60">Freshly prepared at Harvest Moon Cafe and Restaurant, Ahangama.</p>
+        </div>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
+    </div>`;
+}
+
+function openMenu(cat='traditional'){
+  document.getElementById('menuModal').classList.add('open');
+  document.body.style.overflow='hidden';
+  showCategory(cat);
+  document.getElementById('mobileNav').classList.add('hidden');
+}
+function closeMenu(){
+  document.getElementById('menuModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function backdropClose(e){
+  if(e.target.id === 'menuModal') closeMenu();
+}
+function toggleMobile(){
+  document.getElementById('mobileNav').classList.toggle('hidden');
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
+document.getElementById('year').textContent = new Date().getFullYear();
+showCategory('traditional');
+</script>
+</body>
+</html>
