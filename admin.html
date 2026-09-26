@@ -329,7 +329,7 @@ async function addItem() {
 
     const { error: uploadError } =
       await supabaseClient.storage
-        .from("menu-images")
+        .from("menu-image")
         .upload(fileName, imageFile);
 
 
