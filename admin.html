@@ -345,7 +345,7 @@ async function addItem() {
 
     const { data: publicData } =
       supabaseClient.storage
-        .from("menu-images")
+        .from("menu-image")
         .getPublicUrl(fileName);
 
 
