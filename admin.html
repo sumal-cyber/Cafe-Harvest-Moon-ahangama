@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+t<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -169,6 +169,17 @@
         placeholder="Description"
       ></textarea>
 
+      <select id="itemCategory">
+  <option value="traditional">Traditional</option>
+  <option value="sweets">Sweets</option>
+  <option value="kottu">Kottu & Fried Rice</option>
+  <option value="pasta">Pasta & Noodles</option>
+  <option value="omelets">Omelets</option>
+  <option value="soups">Soups</option>
+  <option value="drinks">Drinks</option>
+  <option value="special">Special Drinks</option>
+</select>
+      
       <label>
         📷 Choose Photo
       </label>
@@ -292,6 +303,9 @@ async function addItem() {
   const description =
     document.getElementById("itemDescription").value.trim();
 
+  const category =
+  document.getElementById("itemCategory").value;
+  
   const imageFile =
     document.getElementById("itemImage").files[0];
 
@@ -363,6 +377,7 @@ async function addItem() {
         price: Number(price),
         description: description,
         image_url: imageUrl
+        category: category
       });
 
 
