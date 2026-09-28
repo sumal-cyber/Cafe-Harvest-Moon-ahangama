@@ -371,7 +371,7 @@ async function addItem() {
   // Insert menu item
   const { error } =
     await supabaseClient
-      .from("Menu item")
+.from("Menu item")
 .insert({
   name: name,
   price: Number(price),
@@ -379,7 +379,6 @@ async function addItem() {
   image_url: imageUrl,
   category: category
 });
-      });
 
 
   if (error) {
