@@ -549,8 +549,10 @@ async function editItem(id) {
         image_url: newimageUrl,
         category: newcategory
       })
+    
       .eq("id", id);
 
+  
   if (error) {
 
     alert(
