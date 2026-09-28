@@ -529,10 +529,11 @@ async function editItem(id) {
       .update({
         name: newName,
         price: Number(newPrice),
-        description: newDescription
+        description: newDescription,
         image_url: imageUrl,
         category: category
       })
+
   
       .eq("id", id);
 
