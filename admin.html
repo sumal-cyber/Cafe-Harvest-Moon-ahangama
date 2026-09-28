@@ -522,7 +522,23 @@ async function editItem(id) {
     return;
   }
 
+  
+  const newimage_url =
+    prompt("Enter newimageurl:");
 
+  if (newimageurl === null) {
+    return;
+  }
+    
+
+  const newcategory =
+    prompt("Enter newcategory);
+
+  if (newcategory === null) {
+    return;
+  }
+
+  
   const { error } =
     await supabaseClient
       .from("Menu item")
@@ -533,7 +549,7 @@ async function editItem(id) {
         image_url: newimageUrl,
         category: newcategory
       })
-
+      .eq("id", id);
 
   if (error) {
 
