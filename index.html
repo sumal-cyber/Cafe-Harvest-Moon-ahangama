@@ -446,54 +446,169 @@ const menus = {
   }
 };
 
-function showCategory(cat='traditional'){
+async function showCategory(cat='traditional') {
+
   const data = menus[cat];
-  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+
+  document.querySelectorAll('.tab').forEach(b =>
+    b.classList.toggle('active', b.dataset.cat === cat)
+  );
+
   const content = document.getElementById('menuContent');
 
-  const cards = data.items.map((item,i)=>`
-    <div class="menu-card rounded-2xl border border-forest/10 bg-white p-4">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <p class="text-[10px] font-bold uppercase tracking-[.16em] text-leaf">Item ${String(i+1).padStart(2,'0')}</p>
-          <h3 class="mt-2 text-sm font-semibold leading-6 text-forest">${item[0]}</h3>
-        </div>
-        <span class="shrink-0 rounded-full bg-cream px-3 py-1.5 text-xs font-bold text-forest">${item[1]}</span>
+  // Show loading message
+  content.innerHTML = `
+    <div class="py-10 text-center text-forest">
+      Loading menu...
+    </div>
+  `;
+
+  // Get menu items from Supabase
+  const { data: items, error } = await supabaseClient
+    .from('Menu item')
+    .select('*')
+    .eq('category', cat)
+    .order('id', { ascending: true });
+
+  if (error) {
+    content.innerHTML = `
+      <div class="py-10 text-center text-red-600">
+        Unable to load menu.
       </div>
-    </div>`).join('');
+    `;
+
+    console.error(error);
+    return;
+  }
+
+  const cards = items.map((item, i) => `
+    <div class="menu-card rounded-2xl border border-forest/10 bg-white p-4">
+
+      ${
+        item.image_url
+        ? `
+          <img
+            src="${item.image_url}"
+            alt="${item.name}"
+            class="mb-4 h-44 w-full rounded-xl object-cover"
+          >
+        `
+        : ''
+      }
+
+      <div class="flex items-start justify-between gap-4">
+
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-[.16em] text-leaf">
+            Item ${String(i + 1).padStart(2, '0')}
+          </p>
+
+          <h3 class="mt-2 text-sm font-semibold leading-6 text-forest">
+            ${item.name}
+          </h3>
+
+          ${
+            item.description
+            ? `
+              <p class="mt-2 text-xs leading-5 text-forest/60">
+                ${item.description}
+              </p>
+            `
+            : ''
+          }
+
+        </div>
+
+        <span class="shrink-0 rounded-full bg-cream px-3 py-1.5 text-xs font-bold text-forest">
+          Rs. ${Number(item.price).toFixed(2)}
+        </span>
+
+      </div>
+
+    </div>
+  `).join('');
 
   content.innerHTML = `
     <div class="grid gap-7 lg:grid-cols-[.7fr_1.3fr] lg:items-start">
+
       <div class="overflow-hidden rounded-[1.7rem] bg-forest">
-        <img src="${data.image}" alt="${data.title}" class="h-64 w-full object-cover lg:h-80">
+
+        <img
+          src="${data.image}"
+          alt="${data.title}"
+          class="h-64 w-full object-cover lg:h-80"
+        >
+
         <div class="p-6 text-white">
-          <p class="text-[10px] font-bold uppercase tracking-[.22em] text-gold">${data.subtitle}</p>
-          <h3 class="display mt-2 text-3xl">${data.title}</h3>
-          <p class="mt-3 text-sm leading-6 text-white/60">Freshly prepared at Harvest Moon Cafe and Restaurant, Ahangama.</p>
+
+          <p class="text-[10px] font-bold uppercase tracking-[.22em] text-gold">
+            ${data.subtitle}
+          </p>
+
+          <h3 class="display mt-2 text-3xl">
+            ${data.title}
+          </h3>
+
+          <p class="mt-3 text-sm leading-6 text-white/60">
+            Freshly prepared at Harvest Moon Cafe and Restaurant, Ahangama.
+          </p>
+
         </div>
+
       </div>
-      <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
-    </div>`;
+
+      <div class="grid gap-3 sm:grid-cols-2">
+
+        ${
+          cards ||
+          `
+            <p class="text-sm text-forest/60">
+              No menu items available yet.
+            </p>
+          `
+        }
+
+      </div>
+
+    </div>
+  `;
 }
+
 
 function openMenu(cat='traditional'){
   document.getElementById('menuModal').classList.add('open');
   document.body.style.overflow='hidden';
+
   showCategory(cat);
+
   document.getElementById('mobileNav').classList.add('hidden');
 }
+
+
 function closeMenu(){
   document.getElementById('menuModal').classList.remove('open');
   document.body.style.overflow='';
 }
+
+
 function backdropClose(e){
   if(e.target.id === 'menuModal') closeMenu();
 }
+
+
 function toggleMobile(){
   document.getElementById('mobileNav').classList.toggle('hidden');
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
-document.getElementById('year').textContent = new Date().getFullYear();
+
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeMenu();
+});
+
+
+document.getElementById('year').textContent =
+  new Date().getFullYear();
+
 showCategory('traditional');
 </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
