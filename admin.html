@@ -530,7 +530,10 @@ async function editItem(id) {
         name: newName,
         price: Number(newPrice),
         description: newDescription
+        image_url: imageUrl,
+        category: category
       })
+  
       .eq("id", id);
 
 
