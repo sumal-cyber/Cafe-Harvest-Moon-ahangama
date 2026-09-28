@@ -523,10 +523,10 @@ async function editItem(id) {
   }
 
   
-  const newimage_url =
-    prompt("Enter newimageurl:");
+  const image_url =
+    prompt("Enter imageurl:");
 
-  if (newimageurl === null) {
+  if (imageurl === null) {
     return;
   }
 
@@ -538,7 +538,7 @@ async function editItem(id) {
         name: newName,
         price: Number(newPrice),
         description: newDescription,
-        image_url: newimageurl
+        image_url: imageurl
       })
     
       .eq("id", id);
