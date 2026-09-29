@@ -414,16 +414,13 @@ async function loadMenu() {
   const menuList =
     document.getElementById("menuList");
 
-  menuList.innerHTML =
-    "Loading...";
-
+  menuList.innerHTML = "Loading...";
 
   const { data, error } =
     await supabaseClient
       .from("Menu item")
       .select("*")
       .order("id", { ascending: false });
-
 
   if (error) {
 
@@ -434,7 +431,6 @@ async function loadMenu() {
     return;
   }
 
-
   if (!data || data.length === 0) {
 
     menuList.innerHTML =
@@ -443,25 +439,28 @@ async function loadMenu() {
     return;
   }
 
-
   menuList.innerHTML = "";
-
 
   data.forEach(item => {
 
     const div =
       document.createElement("div");
 
-    div.className =
-      "menu-item";
-
+    div.className = "menu-item";
 
     div.innerHTML = `
 
       ${
         item.image_url
-        ? `<img src="${item.image_url}" alt="${item.name}">`
-        : ""
+        ? `<img src="${item.image_url}" alt="${escapeHtml(item.name)}">`
+        : `<div style="
+            padding:20px;
+            text-align:center;
+            background:#f5f5f0;
+            border-radius:10px;
+          ">
+            📷 No photo
+          </div>`
       }
 
       <h3>${escapeHtml(item.name)}</h3>
@@ -486,8 +485,13 @@ async function loadMenu() {
         🗑️ Delete
       </button>
 
-    `;
+      <button
+        class="edit-btn"
+        onclick="changePhoto(${item.id})">
+        📷 Change Photo
+      </button>
 
+    `;
 
     menuList.appendChild(div);
 
@@ -495,7 +499,78 @@ async function loadMenu() {
 
 }
 
+async function changePhoto(id) {
 
+  const fileInput =
+    document.createElement("input");
+
+  fileInput.type = "file";
+  fileInput.accept = "image/*";
+
+  fileInput.onchange = async function () {
+
+    const file =
+      fileInput.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    const fileName =
+      Date.now() +
+      "-" +
+      file.name.replace(/\s+/g, "-");
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("Menu image")
+        .upload(fileName, file);
+
+    if (uploadError) {
+
+      alert(
+        "❌ Photo upload failed: " +
+        uploadError.message
+      );
+
+      return;
+    }
+
+    const { data: publicData } =
+      supabaseClient
+        .storage
+        .from("Menu image")
+        .getPublicUrl(fileName);
+
+    const newImageUrl =
+      publicData.publicUrl;
+
+    const { error } =
+      await supabaseClient
+        .from("Menu item")
+        .update({
+          image_url: newImageUrl
+        })
+        .eq("id", id);
+
+    if (error) {
+
+      alert(
+        "❌ Photo update failed: " +
+        error.message
+      );
+
+      return;
+    }
+
+    alert("✅ Photo updated!");
+
+    loadMenu();
+  };
+
+  fileInput.click();
+}
 // ---------------- EDIT ITEM ----------------
 
 async function editItem(id) {
