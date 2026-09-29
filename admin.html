@@ -506,14 +506,12 @@ async function editItem(id) {
     return;
   }
 
-
   const newPrice =
     prompt("Enter new price:");
 
   if (newPrice === null) {
     return;
   }
-
 
   const newDescription =
     prompt("Enter new description:");
@@ -522,27 +520,79 @@ async function editItem(id) {
     return;
   }
 
-  
-  const newimage_url =
-    prompt("Enter newimageurl:");
+  const newPhoto =
+    confirm("Do you want to change the photo?");
 
-  if (newimageurl === null) {
-    return;
+  let newImageUrl = null;
+
+  if (newPhoto) {
+
+    const fileInput =
+      document.createElement("input");
+
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+
+    fileInput.click();
+
+    await new Promise(resolve => {
+
+      fileInput.onchange = resolve;
+
+    });
+
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("No photo selected.");
+      return;
+    }
+
+    const fileName =
+      Date.now() + "-" + file.name;
+
+    const { error: uploadError } =
+      await supabaseClient
+        .storage
+        .from("Menu image")
+        .upload(fileName, file);
+
+    if (uploadError) {
+
+      alert(
+        "❌ Photo upload failed: " +
+        uploadError.message
+      );
+
+      return;
+    }
+
+    const { data: publicData } =
+      supabaseClient
+        .storage
+        .from("Menu image")
+        .getPublicUrl(fileName);
+
+    newImageUrl =
+      publicData.publicUrl;
   }
 
-  
+  const updateData = {
+    name: newName,
+    price: Number(newPrice),
+    description: newDescription
+  };
+
+  if (newImageUrl) {
+    updateData.image_url = newImageUrl;
+  }
+
   const { error } =
     await supabaseClient
       .from("Menu item")
-      .update({
-        name: newName,
-        price: Number(newPrice),
-        description: newDescription,
-        image_url: newimageurl
-      })
-    
+      .update(updateData)
       .eq("id", id);
-  
+
   if (error) {
 
     alert(
@@ -553,11 +603,9 @@ async function editItem(id) {
     return;
   }
 
-
   alert("✅ Menu item updated!");
 
   loadMenu();
-
 }
 
 
