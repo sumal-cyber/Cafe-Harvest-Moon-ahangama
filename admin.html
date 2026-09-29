@@ -501,74 +501,39 @@ async function loadMenu() {
 async function editItem(id) {
 
   const newName = prompt("Enter new menu item name:");
-
   if (newName === null) return;
 
-
   const newPrice = prompt("Enter new price:");
-
   if (newPrice === null) return;
 
-
   const newDescription = prompt("Enter new description:");
-
   if (newDescription === null) return;
 
-
-  const changePhoto =
-    confirm("Do you want to change the photo?");
-
+  const changePhoto = confirm("Do you want to change the photo?");
 
   let newImageUrl = null;
 
-
   if (changePhoto) {
 
-    const fileInput =
-      document.createElement("input");
+    const imageInput = document.getElementById("editImage");
 
-    fileInput.type = "file";
-    fileInput.accept = "image/*";
+    imageInput.value = "";
 
-    fileInput.style.display = "block";
-    fileInput.style.position = "fixed";
-    fileInput.style.top = "20px";
-    fileInput.style.left = "20px";
-    fileInput.style.zIndex = "9999";
-
-    document.body.appendChild(fileInput);
-
-    fileInput.click();
-
+    imageInput.click();
 
     await new Promise(resolve => {
-
-      fileInput.addEventListener(
-        "change",
-        resolve,
-        { once: true }
-      );
-
+      imageInput.onchange = resolve;
     });
 
-
-    const file = fileInput.files[0];
-
-    document.body.removeChild(fileInput);
-
+    const file = imageInput.files[0];
 
     if (!file) {
-
       alert("❌ No photo selected.");
-
       return;
     }
 
-
     const fileName =
-      Date.now() + "-" +
-      file.name.replace(/\s+/g, "-");
-
+      Date.now() + "-" + file.name.replace(/\s+/g, "-");
 
     const { error: uploadError } =
       await supabaseClient
@@ -576,17 +541,13 @@ async function editItem(id) {
         .from("Menu image")
         .upload(fileName, file);
 
-
     if (uploadError) {
-
       alert(
         "❌ Photo upload failed: " +
         uploadError.message
       );
-
       return;
     }
-
 
     const { data: publicData } =
       supabaseClient
@@ -594,30 +555,18 @@ async function editItem(id) {
         .from("Menu image")
         .getPublicUrl(fileName);
 
-
-    newImageUrl =
-      publicData.publicUrl;
+    newImageUrl = publicData.publicUrl;
   }
-
 
   const updateData = {
-
     name: newName,
-
     price: Number(newPrice),
-
     description: newDescription
-
   };
 
-
   if (newImageUrl) {
-
-    updateData.image_url =
-      newImageUrl;
-
+    updateData.image_url = newImageUrl;
   }
-
 
   const { error } =
     await supabaseClient
@@ -625,25 +574,18 @@ async function editItem(id) {
       .update(updateData)
       .eq("id", id);
 
-
   if (error) {
-
     alert(
       "❌ Update failed: " +
       error.message
     );
-
     return;
   }
 
-
   alert("✅ Menu item updated!");
 
-
   loadMenu();
-
 }
-
   
 // ---------------- DELETE ITEM ----------------
 
