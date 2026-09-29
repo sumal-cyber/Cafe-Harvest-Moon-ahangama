@@ -500,85 +500,44 @@ async function loadMenu() {
 
 async function editItem(id) {
 
-  const newName = prompt("Enter new menu item name:");
-  if (newName === null) return;
+  const newName =
+    prompt("Enter new menu item name:");
 
-  const newPrice = prompt("Enter new price:");
-  if (newPrice === null) return;
-
-  const newDescription = prompt("Enter new description:");
-  if (newDescription === null) return;
-
-  const changePhoto = confirm("Do you want to change the photo?");
-
-  let newImageUrl = null;
-
-  if (changePhoto) {
-
-    const imageInput = document.getElementById("editImage");
-
-    imageInput.value = "";
-
-    imageInput.click();
-
-    await new Promise(resolve => {
-      imageInput.onchange = resolve;
-    });
-
-    const file = imageInput.files[0];
-
-    if (!file) {
-      alert("❌ No photo selected.");
-      return;
-    }
-
-    const fileName =
-      Date.now() + "-" + file.name.replace(/\s+/g, "-");
-
-    const { error: uploadError } =
-      await supabaseClient
-        .storage
-        .from("Menu image")
-        .upload(fileName, file);
-
-    if (uploadError) {
-      alert(
-        "❌ Photo upload failed: " +
-        uploadError.message
-      );
-      return;
-    }
-
-    const { data: publicData } =
-      supabaseClient
-        .storage
-        .from("Menu image")
-        .getPublicUrl(fileName);
-
-    newImageUrl = publicData.publicUrl;
+  if (newName === null) {
+    return;
   }
 
-  const updateData = {
-    name: newName,
-    price: Number(newPrice),
-    description: newDescription
-  };
+  const newPrice =
+    prompt("Enter new price:");
 
-  if (newImageUrl) {
-    updateData.image_url = newImageUrl;
+  if (newPrice === null) {
+    return;
+  }
+
+  const newDescription =
+    prompt("Enter new description:");
+
+  if (newDescription === null) {
+    return;
   }
 
   const { error } =
     await supabaseClient
       .from("Menu item")
-      .update(updateData)
+      .update({
+        name: newName,
+        price: Number(newPrice),
+        description: newDescription
+      })
       .eq("id", id);
 
   if (error) {
+
     alert(
       "❌ Update failed: " +
       error.message
     );
+
     return;
   }
 
