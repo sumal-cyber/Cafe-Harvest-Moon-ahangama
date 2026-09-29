@@ -499,33 +499,29 @@ async function loadMenu() {
 
 async function editItem(id) {
 
-  const newName =
-    prompt("Enter new menu item name:");
+  const newName = prompt("Enter new menu item name:");
 
-  if (newName === null) {
-    return;
-  }
+  if (newName === null) return;
 
-  const newPrice =
-    prompt("Enter new price:");
 
-  if (newPrice === null) {
-    return;
-  }
+  const newPrice = prompt("Enter new price:");
 
-  const newDescription =
-    prompt("Enter new description:");
+  if (newPrice === null) return;
 
-  if (newDescription === null) {
-    return;
-  }
 
-  const newPhoto =
+  const newDescription = prompt("Enter new description:");
+
+  if (newDescription === null) return;
+
+
+  const changePhoto =
     confirm("Do you want to change the photo?");
+
 
   let newImageUrl = null;
 
-  if (newPhoto) {
+
+  if (changePhoto) {
 
     const fileInput =
       document.createElement("input");
@@ -533,29 +529,52 @@ async function editItem(id) {
     fileInput.type = "file";
     fileInput.accept = "image/*";
 
+    fileInput.style.display = "block";
+    fileInput.style.position = "fixed";
+    fileInput.style.top = "20px";
+    fileInput.style.left = "20px";
+    fileInput.style.zIndex = "9999";
+
+    document.body.appendChild(fileInput);
+
     fileInput.click();
+
 
     await new Promise(resolve => {
 
-      fileInput.onchange = resolve;
+      fileInput.addEventListener(
+        "change",
+        resolve,
+        { once: true }
+      );
 
     });
 
+
     const file = fileInput.files[0];
 
+    document.body.removeChild(fileInput);
+
+
     if (!file) {
-      alert("No photo selected.");
+
+      alert("❌ No photo selected.");
+
       return;
     }
 
+
     const fileName =
-      Date.now() + "-" + file.name;
+      Date.now() + "-" +
+      file.name.replace(/\s+/g, "-");
+
 
     const { error: uploadError } =
       await supabaseClient
         .storage
         .from("Menu image")
         .upload(fileName, file);
+
 
     if (uploadError) {
 
@@ -567,31 +586,44 @@ async function editItem(id) {
       return;
     }
 
+
     const { data: publicData } =
       supabaseClient
         .storage
         .from("Menu image")
         .getPublicUrl(fileName);
 
+
     newImageUrl =
       publicData.publicUrl;
   }
 
+
   const updateData = {
+
     name: newName,
+
     price: Number(newPrice),
+
     description: newDescription
+
   };
 
+
   if (newImageUrl) {
-    updateData.image_url = newImageUrl;
+
+    updateData.image_url =
+      newImageUrl;
+
   }
+
 
   const { error } =
     await supabaseClient
       .from("Menu item")
       .update(updateData)
       .eq("id", id);
+
 
   if (error) {
 
@@ -603,9 +635,12 @@ async function editItem(id) {
     return;
   }
 
+
   alert("✅ Menu item updated!");
 
+
   loadMenu();
+
 }
 
   
