@@ -524,7 +524,7 @@ async function changePhoto(id) {
     const { error: uploadError } =
       await supabaseClient
         .storage
-        .from("Menu image")
+        .from("menu image")
         .upload(fileName, file);
 
     if (uploadError) {
