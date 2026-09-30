@@ -540,7 +540,7 @@ async function changePhoto(id) {
     const { data: publicData } =
       supabaseClient
         .storage
-        .from("Menu image")
+        .from("menu image")
         .getPublicUrl(fileName);
 
     const newImageUrl =
