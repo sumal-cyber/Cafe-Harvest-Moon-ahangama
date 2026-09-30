@@ -550,7 +550,7 @@ async function changePhoto(id) {
       await supabaseClient
         .from("Menu item")
         .update({
-          image_url: ImageUrl
+          image_url: newImageUrl
         })
         .eq("id", id);
 
