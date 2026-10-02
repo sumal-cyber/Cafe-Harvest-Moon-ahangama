@@ -376,11 +376,27 @@
     const container =
       document.getElementById("items");
 
-    const filtered = menu.filter(
-      item =>
-        String(item.category).toLowerCase() ===
-        String(category).toLowerCase()
-    );
+    const normalize = value =>
+  String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z]/g, "");
+
+const selectedCategory = normalize(category);
+
+const filtered = menu.filter(item => {
+  const itemCategory = normalize(item.category);
+
+  if (
+    selectedCategory === "special" ||
+    selectedCategory === "specialdrink" ||
+    selectedCategory === "specialdrinks"
+  ) {
+    return ["special", "specialdrink", "specialdrinks"]
+      .includes(itemCategory);
+  }
+
+  return itemCategory === selectedCategory;
+});
 
     if (filtered.length === 0) {
 
