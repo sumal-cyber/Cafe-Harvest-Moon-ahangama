@@ -524,6 +524,24 @@
   // Load real menu from Supabase
   loadMenu();
 
+  loadMenu();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL =
+    "https://opxgjqbwfvtvcadmkpbw.supabase.co";
+
+  const SUPABASE_KEY =
+    "https://supabase.com/dashboard/org/xorktekgwffzhuocwfuw";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 </script>
 
 </body>
