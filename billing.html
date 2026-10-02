@@ -296,190 +296,21 @@
 
 </div>
 
+
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+  const SUPABASE_URL =
+    "https://opxgjqbwfvtvcadmkpbw.supabase.co";
 
-  /*
-    TEMPORARY MENU
-    Later we will replace this
-    with your Supabase menu.
-  */
+  const SUPABASE_KEY =
+    "ඔයාගේ publishable key එක";
 
-  const menu = [
-
-    { name: "Rice & Curry", price: 850, category: "Traditional" },
-    { name: "Chicken Rice & Curry", price: 1200, category: "Traditional" },
-
-    { name: "Chicken Kottu", price: 1200, category: "Kottu" },
-    { name: "Vegetable Kottu", price: 900, category: "Kottu" },
-
-    { name: "Chicken Pasta", price: 1200, category: "Pasta" },
-    { name: "Vegetable Pasta", price: 950, category: "Pasta" },
-
-    { name: "Omelet", price: 700, category: "Omelets" },
-
-    { name: "Vegetable Soup", price: 650, category: "Soups" },
-
-    { name: "Cappuccino", price: 650, category: "Drinks" },
-    { name: "Fresh Lime", price: 450, category: "Drinks" },
-
-    { name: "Homemade Sweet", price: 500, category: "Sweets" },
-
-    { name: "Special Fresh Juice", price: 750, category: "Special Drinks" }
-
-  ];
-
-  let bill = [];
-
-  function showCategory(category, button) {
-
-    document.querySelectorAll(".category-btn").forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    button.classList.add("active");
-
-    const container = document.getElementById("items");
-
-    const filtered = menu.filter(item => item.category === category);
-
-    container.innerHTML = "";
-
-    filtered.forEach((item, index) => {
-
-      const realIndex = menu.indexOf(item);
-
-      container.innerHTML += `
-        <div class="item">
-
-          <div>
-            <div class="item-name">${item.name}</div>
-            <div class="item-price">
-              Rs. ${item.price.toFixed(2)}
-            </div>
-          </div>
-
-          <button class="add-btn"
-            onclick="addItem(${realIndex})">
-            ADD
-          </button>
-
-        </div>
-      `;
-    });
-  }
-
-  function addItem(index) {
-
-    const item = menu[index];
-
-    const existing = bill.find(
-      billItem => billItem.name === item.name
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
     );
-
-    if (existing) {
-      existing.qty++;
-    } else {
-      bill.push({
-        name: item.name,
-        price: item.price,
-        qty: 1
-      });
-    }
-
-    renderBill();
-  }
-
-  function changeQty(index, change) {
-
-    bill[index].qty += change;
-
-    if (bill[index].qty <= 0) {
-      bill.splice(index, 1);
-    }
-
-    renderBill();
-  }
-
-  function renderBill() {
-
-    const billContainer = document.getElementById("bill");
-
-    if (bill.length === 0) {
-
-      billContainer.innerHTML =
-        '<div class="empty">No items added</div>';
-
-      document.getElementById("total").textContent =
-        "Rs. 0.00";
-
-      return;
-    }
-
-    let total = 0;
-
-    billContainer.innerHTML = "";
-
-    bill.forEach((item, index) => {
-
-      const lineTotal = item.price * item.qty;
-
-      total += lineTotal;
-
-      billContainer.innerHTML += `
-
-        <div class="bill-row">
-
-          <div>
-            <strong>${item.name}</strong>
-            <div class="item-price">
-              Rs. ${item.price.toFixed(2)}
-            </div>
-          </div>
-
-          <div class="qty">
-
-            <button onclick="changeQty(${index}, -1)">
-              −
-            </button>
-
-            <strong>${item.qty}</strong>
-
-            <button onclick="changeQty(${index}, 1)">
-              +
-            </button>
-
-          </div>
-
-          <div>
-            Rs. ${lineTotal.toFixed(2)}
-          </div>
-
-        </div>
-      `;
-    });
-
-    document.getElementById("total").textContent =
-      "Rs. " + total.toFixed(2);
-  }
-
-  function clearBill() {
-
-    if (bill.length === 0) return;
-
-    if (confirm("Clear this bill?")) {
-
-      bill = [];
-
-      renderBill();
-    }
-  }
-
-  // Show first category when page opens
-  showCategory(
-    "Traditional",
-    document.querySelector(".category-btn")
-  );
-
 </script>
 
 </body>
