@@ -1,1 +1,486 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Harvest Moon Billing</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f0e8;
+      color: #18352b;
+    }
+
+    .app {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      background: #18352b;
+      color: white;
+      padding: 22px 15px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .header p {
+      margin: 6px 0 0;
+      font-size: 14px;
+    }
+
+    .section {
+      background: white;
+      padding: 15px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .category-btn {
+      border: 1px solid #18352b;
+      background: white;
+      color: #18352b;
+      padding: 9px 13px;
+      border-radius: 20px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .category-btn.active {
+      background: #18352b;
+      color: white;
+    }
+
+    .items {
+      display: grid;
+      gap: 8px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+    }
+
+    .item-name {
+      font-weight: bold;
+    }
+
+    .item-price {
+      font-size: 13px;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    .add-btn {
+      border: none;
+      background: #18352b;
+      color: white;
+      padding: 9px 13px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .bill-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .qty button {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #18352b;
+      background: white;
+      color: #18352b;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .bill-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      padding-top: 15px;
+    }
+
+    .print-btn {
+      width: 100%;
+      border: none;
+      background: #18352b;
+      color: white;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .clear-btn {
+      width: 100%;
+      margin-top: 8px;
+      border: 1px solid #999;
+      background: white;
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      padding: 15px 0;
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .app {
+        max-width: 100%;
+        padding: 0;
+      }
+
+      .header {
+        color: black;
+        background: white;
+        padding: 0 0 10px;
+        border-radius: 0;
+        border-bottom: 1px solid #000;
+      }
+
+      .section:not(.bill-section) {
+        display: none;
+      }
+
+      .bill-section {
+        display: block;
+        padding: 0;
+        margin: 0;
+      }
+
+      .print-btn,
+      .clear-btn {
+        display: none;
+      }
+
+      @page {
+        size: A5;
+        margin: 10mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <h1>HARVEST MOON</h1>
+    <p>Cafe & Restaurant</p>
+    <p>Billing System</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Select Category</div>
+
+    <div class="categories">
+      <button class="category-btn active" onclick="showCategory('Traditional', this)">
+        Traditional
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Kottu', this)">
+        Kottu
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Pasta', this)">
+        Pasta
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Omelets', this)">
+        Omelets
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Soups', this)">
+        Soups
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Drinks', this)">
+        Drinks
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Sweets', this)">
+        Sweets
+      </button>
+
+      <button class="category-btn" onclick="showCategory('Special Drinks', this)">
+        Special Drinks
+      </button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Items</div>
+    <div id="items" class="items"></div>
+  </div>
+
+  <div class="section bill-section">
+
+    <div class="section-title">Current Bill</div>
+
+    <div id="bill">
+      <div class="empty">No items added</div>
+    </div>
+
+    <div class="bill-total">
+      <span>TOTAL</span>
+      <span id="total">Rs. 0.00</span>
+    </div>
+
+    <br>
+
+    <button class="print-btn" onclick="window.print()">
+      🖨️ PRINT A5 BILL
+    </button>
+
+    <button class="clear-btn" onclick="clearBill()">
+      Clear Bill
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+  /*
+    TEMPORARY MENU
+    Later we will replace this
+    with your Supabase menu.
+  */
+
+  const menu = [
+
+    { name: "Rice & Curry", price: 850, category: "Traditional" },
+    { name: "Chicken Rice & Curry", price: 1200, category: "Traditional" },
+
+    { name: "Chicken Kottu", price: 1200, category: "Kottu" },
+    { name: "Vegetable Kottu", price: 900, category: "Kottu" },
+
+    { name: "Chicken Pasta", price: 1200, category: "Pasta" },
+    { name: "Vegetable Pasta", price: 950, category: "Pasta" },
+
+    { name: "Omelet", price: 700, category: "Omelets" },
+
+    { name: "Vegetable Soup", price: 650, category: "Soups" },
+
+    { name: "Cappuccino", price: 650, category: "Drinks" },
+    { name: "Fresh Lime", price: 450, category: "Drinks" },
+
+    { name: "Homemade Sweet", price: 500, category: "Sweets" },
+
+    { name: "Special Fresh Juice", price: 750, category: "Special Drinks" }
+
+  ];
+
+  let bill = [];
+
+  function showCategory(category, button) {
+
+    document.querySelectorAll(".category-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    const container = document.getElementById("items");
+
+    const filtered = menu.filter(item => item.category === category);
+
+    container.innerHTML = "";
+
+    filtered.forEach((item, index) => {
+
+      const realIndex = menu.indexOf(item);
+
+      container.innerHTML += `
+        <div class="item">
+
+          <div>
+            <div class="item-name">${item.name}</div>
+            <div class="item-price">
+              Rs. ${item.price.toFixed(2)}
+            </div>
+          </div>
+
+          <button class="add-btn"
+            onclick="addItem(${realIndex})">
+            ADD
+          </button>
+
+        </div>
+      `;
+    });
+  }
+
+  function addItem(index) {
+
+    const item = menu[index];
+
+    const existing = bill.find(
+      billItem => billItem.name === item.name
+    );
+
+    if (existing) {
+      existing.qty++;
+    } else {
+      bill.push({
+        name: item.name,
+        price: item.price,
+        qty: 1
+      });
+    }
+
+    renderBill();
+  }
+
+  function changeQty(index, change) {
+
+    bill[index].qty += change;
+
+    if (bill[index].qty <= 0) {
+      bill.splice(index, 1);
+    }
+
+    renderBill();
+  }
+
+  function renderBill() {
+
+    const billContainer = document.getElementById("bill");
+
+    if (bill.length === 0) {
+
+      billContainer.innerHTML =
+        '<div class="empty">No items added</div>';
+
+      document.getElementById("total").textContent =
+        "Rs. 0.00";
+
+      return;
+    }
+
+    let total = 0;
+
+    billContainer.innerHTML = "";
+
+    bill.forEach((item, index) => {
+
+      const lineTotal = item.price * item.qty;
+
+      total += lineTotal;
+
+      billContainer.innerHTML += `
+
+        <div class="bill-row">
+
+          <div>
+            <strong>${item.name}</strong>
+            <div class="item-price">
+              Rs. ${item.price.toFixed(2)}
+            </div>
+          </div>
+
+          <div class="qty">
+
+            <button onclick="changeQty(${index}, -1)">
+              −
+            </button>
+
+            <strong>${item.qty}</strong>
+
+            <button onclick="changeQty(${index}, 1)">
+              +
+            </button>
+
+          </div>
+
+          <div>
+            Rs. ${lineTotal.toFixed(2)}
+          </div>
+
+        </div>
+      `;
+    });
+
+    document.getElementById("total").textContent =
+      "Rs. " + total.toFixed(2);
+  }
+
+  function clearBill() {
+
+    if (bill.length === 0) return;
+
+    if (confirm("Clear this bill?")) {
+
+      bill = [];
+
+      renderBill();
+    }
+  }
+
+  // Show first category when page opens
+  showCategory(
+    "Traditional",
+    document.querySelector(".category-btn")
+  );
+
+</script>
+
+</body>
+</html>
