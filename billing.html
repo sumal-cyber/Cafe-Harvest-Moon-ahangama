@@ -300,6 +300,8 @@
 <script>
   src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
   const SUPABASE_URL =
     "https://opxgjqbwfvtvcadmkpbw.supabase.co";
@@ -312,8 +314,10 @@
       SUPABASE_URL,
       SUPABASE_KEY
     );
+</script>
 
- <script>
+<script>
+
 
   let menu = [];
   let bill = [];
@@ -498,48 +502,6 @@
 
               <button
                 onclick="changeQty(${index}, -1)">
-                −
-              </button>
-
-              <strong>${item.qty}</strong>
-
-              <button
-                onclick="changeQty(${index}, 1)">
-                +
-              </button>
-
-            </div>
-
-            <div>
-              Rs. ${lineTotal.toFixed(2)}
-            </div>
-
-          </div>
-        `;
-      }
-    ).join("");
-
-    document.getElementById("total").textContent =
-      "Rs. " + total.toFixed(2);
-  }
-
-
-  function clearBill() {
-
-    if (bill.length === 0) return;
-
-    if (confirm("Clear this bill?")) {
-
-      bill = [];
-
-      renderBill();
-    }
-  }
-
-
-  // Load real menu from Supabase
-  loadMenu();
-
                 −
               </button>
 
