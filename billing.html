@@ -540,6 +540,49 @@
   // Load real menu from Supabase
   loadMenu();
 
+                −
+              </button>
 
+              <strong>${item.qty}</strong>
+
+              <button
+                onclick="changeQty(${index}, 1)">
+                +
+              </button>
+
+            </div>
+
+            <div>
+              Rs. ${lineTotal.toFixed(2)}
+            </div>
+
+          </div>
+        `;
+      }
+    ).join("");
+
+    document.getElementById("total").textContent =
+      "Rs. " + total.toFixed(2);
+  }
+
+
+  function clearBill() {
+
+    if (bill.length === 0) return;
+
+    if (confirm("Clear this bill?")) {
+
+      bill = [];
+
+      renderBill();
+    }
+  }
+
+
+  // Load real menu from Supabase
+  loadMenu();
+
+</script>
+  
 </body>
 </html>
