@@ -297,20 +297,233 @@
 </div>
 
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script>
 
-<script>
-  const SUPABASE_URL =
-    "https://opxgjqbwfvtvcadmkpbw.supabase.co";
+  let menu = [];
+  let bill = [];
 
-  const SUPABASE_KEY =
-    "ඔයාගේ publishable key එක";
+  const categories = [
+    "traditional",
+    "kottu",
+    "pasta",
+    "omelets",
+    "soups",
+    "drinks",
+    "sweets",
+    "special"
+  ];
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
+  async function loadMenu() {
+
+    const { data, error } = await supabaseClient
+      .from("Menu item")
+      .select("id, name, price, category")
+      .order("id", { ascending: true });
+
+    if (error) {
+      console.error(error);
+
+      document.getElementById("items").innerHTML =
+        '<div class="empty">Unable to load menu.</div>';
+
+      return;
+    }
+
+    menu = data || [];
+
+    showCategory("traditional");
+  }
+
+
+  function showCategory(category, button = null) {
+
+    document.querySelectorAll(".category-btn").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    if (button) {
+      button.classList.add("active");
+    } else {
+
+      const firstButton =
+        document.querySelector(".category-btn");
+
+      if (firstButton) {
+        firstButton.classList.add("active");
+      }
+    }
+
+    const container =
+      document.getElementById("items");
+
+    const filtered = menu.filter(
+      item =>
+        String(item.category).toLowerCase() ===
+        String(category).toLowerCase()
     );
+
+    if (filtered.length === 0) {
+
+      container.innerHTML =
+        '<div class="empty">No items available</div>';
+
+      return;
+    }
+
+    container.innerHTML = filtered.map(item => {
+
+      const index = menu.findIndex(
+        menuItem => menuItem.id === item.id
+      );
+
+      return `
+        <div class="item">
+
+          <div>
+            <div class="item-name">
+              ${item.name}
+            </div>
+
+            <div class="item-price">
+              Rs. ${Number(item.price).toFixed(2)}
+            </div>
+          </div>
+
+          <button
+            class="add-btn"
+            onclick="addItem(${index})">
+            ADD
+          </button>
+
+        </div>
+      `;
+
+    }).join('');
+  }
+
+
+  function addItem(index) {
+
+    const item = menu[index];
+
+    const existing = bill.find(
+      billItem => billItem.id === item.id
+    );
+
+    if (existing) {
+
+      existing.qty++;
+
+    } else {
+
+      bill.push({
+        id: item.id,
+        name: item.name,
+        price: Number(item.price),
+        qty: 1
+      });
+
+    }
+
+    renderBill();
+  }
+
+
+  function changeQty(index, change) {
+
+    bill[index].qty += change;
+
+    if (bill[index].qty <= 0) {
+      bill.splice(index, 1);
+    }
+
+    renderBill();
+  }
+
+
+  function renderBill() {
+
+    const billContainer =
+      document.getElementById("bill");
+
+    if (bill.length === 0) {
+
+      billContainer.innerHTML =
+        '<div class="empty">No items added</div>';
+
+      document.getElementById("total").textContent =
+        "Rs. 0.00";
+
+      return;
+    }
+
+    let total = 0;
+
+    billContainer.innerHTML = bill.map(
+      (item, index) => {
+
+        const lineTotal =
+          item.price * item.qty;
+
+        total += lineTotal;
+
+        return `
+          <div class="bill-row">
+
+            <div>
+              <strong>${item.name}</strong>
+
+              <div class="item-price">
+                Rs. ${item.price.toFixed(2)}
+              </div>
+            </div>
+
+            <div class="qty">
+
+              <button
+                onclick="changeQty(${index}, -1)">
+                −
+              </button>
+
+              <strong>${item.qty}</strong>
+
+              <button
+                onclick="changeQty(${index}, 1)">
+                +
+              </button>
+
+            </div>
+
+            <div>
+              Rs. ${lineTotal.toFixed(2)}
+            </div>
+
+          </div>
+        `;
+      }
+    ).join("");
+
+    document.getElementById("total").textContent =
+      "Rs. " + total.toFixed(2);
+  }
+
+
+  function clearBill() {
+
+    if (bill.length === 0) return;
+
+    if (confirm("Clear this bill?")) {
+
+      bill = [];
+
+      renderBill();
+    }
+  }
+
+
+  // Load real menu from Supabase
+  loadMenu();
+
 </script>
 
 </body>
