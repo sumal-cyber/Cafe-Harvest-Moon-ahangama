@@ -179,10 +179,9 @@
     display: block;
     }
 }
-      
+    
 @media print {
 
-  
   @page {
     size: 5in 7in;
     margin: 0.5cm;
@@ -193,34 +192,24 @@
     padding: 0 !important;
   }
 
-    .menu-selection {
-    display: none !important;
-    visibility: hidden !important;
-  }
-
-  #items,
-  .categories,
-  .category-btn,
-  .add-btn {
+  /* HIDE MENU / CATEGORY / ITEMS */
+  body .app > .menu-selection {
     display: none !important;
   }
 
-  .bill-section {
+  /* SHOW BILL */
+  body .app > .bill-section {
+    display: block !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  .bill-section .section-title {
-    margin: 2px 0 4px 0 !important;
-    padding: 0 !important;
-  }
-
   .bill-row {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    align-items: center !important;
+    grid-template-columns: minmax(0, 1fr) auto auto !important;
     gap: 5px !important;
+    align-items: center !important;
     padding: 2px 0 !important;
     margin: 0 !important;
     font-size: 10px !important;
@@ -235,22 +224,12 @@
   .bill-row > div:last-child {
     white-space: nowrap !important;
     text-align: right !important;
-    font-size: 10px !important;
-  }
-
-  .bill-row .item-price {
-    font-size: 9px !important;
-    line-height: 1.1 !important;
   }
 
   .qty button {
     display: none !important;
   }
 
-  .qty {
-    font-size: 10px !important;
-  }
-  
   .receipt-meta {
     margin: 0 0 3px 0 !important;
     padding: 0 !important;
@@ -260,7 +239,6 @@
 
   .receipt-meta p {
     margin: 0 !important;
-    padding: 0 !important;
   }
 
   .payment-box {
@@ -276,14 +254,8 @@
   .print-btn,
   .clear-btn {
     display: none !important;
-
-  body .app .menu-selection {
-    display: none !important;
   }
 
-  body .app .menu-selection * {
-    display: none !important;
-  }
 }
     
   </style>
