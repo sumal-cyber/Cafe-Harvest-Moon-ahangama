@@ -222,11 +222,36 @@
   }
 }
     
-      @page {
-        size: A5;
-        margin: 10mm;
-      }
-    }
+@media print {
+
+  @page {
+    size: 5in 7in;
+    margin: 0.5cm;
+  }
+
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .bill-section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .bill-section .section-title {
+    margin-top: 2px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .bill-row {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    margin: 0 !important;
+  }
+}
+    
   </style>
 </head>
 
