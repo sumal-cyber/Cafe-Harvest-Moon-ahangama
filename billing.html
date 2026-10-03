@@ -203,6 +203,19 @@
   }
 }
 
+    @media print {
+  .section:not(.bill-section) {
+    display: none !important;
+  }
+
+  .category-btn,
+  .add-btn,
+  .qty button,
+  #items {
+    display: none !important;
+  }
+}
+    
       @page {
         size: A5;
         margin: 10mm;
