@@ -277,10 +277,40 @@
       <div class="empty">No items added</div>
     </div>
 
-    <div class="bill-total">
-      <span>TOTAL</span>
-      <span id="total">Rs. 0.00</span>
-    </div>
+    
+<div class="receipt-meta">
+  <p>🔢 Bill No: <strong id="billNo"></strong></p>
+  <p>📅 Date / Time: <span id="billDate"></span></p>
+</div>
+
+<div class="payment-box">
+  <p>Subtotal: <strong id="subtotal">Rs. 0.00</strong></p>
+  <p>Card Fee (3%): <strong id="cardFee">Rs. 0.00</strong></p>
+
+  <h3>💰 Final Total: <strong id="total">Rs. 0.00</strong></h3>
+
+  <label for="paymentMethod">Payment Method</label>
+  <select id="paymentMethod" onchange="updatePayment()">
+    <option value="cash">Cash</option>
+    <option value="card">Card</option>
+  </select>
+
+  <div id="cashRow">
+    <label for="cashReceived">💵 Cash Received</label>
+    <input
+      type="number"
+      id="cashReceived"
+      min="0"
+      step="0.01"
+      placeholder="Enter cash received"
+      oninput="updatePayment()">
+  </div>
+
+  <p id="changeRow">
+    💵 Balance / Change:
+    <strong id="change">Rs. 0.00</strong>
+  </p>
+</div>
 
     <br>
 
@@ -321,6 +351,26 @@
 
   let menu = [];
   let bill = [];
+
+  
+const receiptDate = new Date();
+const pad = n => String(n).padStart(2, "0");
+
+const dateKey =
+  receiptDate.getFullYear() +
+  pad(receiptDate.getMonth() + 1) +
+  pad(receiptDate.getDate());
+
+const timeKey =
+  pad(receiptDate.getHours()) +
+  pad(receiptDate.getMinutes()) +
+  pad(receiptDate.getSeconds());
+
+const billNo = "HM-" + dateKey + "-" + timeKey;
+
+document.getElementById("billNo").textContent = billNo;
+document.getElementById("billDate").textContent =
+  receiptDate.toLocaleString("en-LK");
 
   const categories = [
     "traditional",
@@ -477,71 +527,83 @@ const filtered = menu.filter(item => {
   }
 
 
-  function renderBill() {
+  
+function renderBill() {
+  const billContainer = document.getElementById("bill");
 
-    const billContainer =
-      document.getElementById("bill");
+  if (bill.length === 0) {
+    billContainer.innerHTML =
+      '<div class="empty">No items added</div>';
+  } else {
+    billContainer.innerHTML = bill.map((item, index) => {
+      const lineTotal = item.price * item.qty;
 
-    if (bill.length === 0) {
-
-      billContainer.innerHTML =
-        '<div class="empty">No items added</div>';
-
-      document.getElementById("total").textContent =
-        "Rs. 0.00";
-
-      return;
-    }
-
-    let total = 0;
-
-    billContainer.innerHTML = bill.map(
-      (item, index) => {
-
-        const lineTotal =
-          item.price * item.qty;
-
-        total += lineTotal;
-
-        return `
-          <div class="bill-row">
-
-            <div>
-              <strong>${item.name}</strong>
-
-              <div class="item-price">
-                Rs. ${item.price.toFixed(2)}
-              </div>
+      return `
+        <div class="bill-row">
+          <div>
+            <strong>${item.name}</strong>
+            <div class="item-price">
+              Rs. ${item.price.toFixed(2)}
             </div>
-
-            <div class="qty">
-
-              <button
-                onclick="changeQty(${index}, -1)">
-                −
-              </button>
-
-              <strong>${item.qty}</strong>
-
-              <button
-                onclick="changeQty(${index}, 1)">
-                +
-              </button>
-
-            </div>
-
-            <div>
-              Rs. ${lineTotal.toFixed(2)}
-            </div>
-
           </div>
-        `;
-      }
-    ).join("");
 
-    document.getElementById("total").textContent =
-      "Rs. " + total.toFixed(2);
+          <div class="qty">
+            <button onclick="changeQty(${index}, -1)">−</button>
+            <strong>${item.qty}</strong>
+            <button onclick="changeQty(${index}, 1)">+</button>
+          </div>
+
+          <div>Rs. ${lineTotal.toFixed(2)}</div>
+        </div>
+      `;
+    }).join("");
   }
+
+  updatePayment();
+}
+
+function updatePayment() {
+  const subtotal = bill.reduce(
+    (sum, item) => sum + item.price * item.qty, 0
+  );
+
+  const method =
+    document.getElementById("paymentMethod").value;
+
+  const cardFee = method === "card" ? subtotal * 0.03 : 0;
+  const finalTotal = subtotal + cardFee;
+
+  document.getElementById("subtotal").textContent =
+    "Rs. " + subtotal.toFixed(2);
+
+  document.getElementById("cardFee").textContent =
+    "Rs. " + cardFee.toFixed(2);
+
+  document.getElementById("total").textContent =
+    "Rs. " + finalTotal.toFixed(2);
+
+  const cashRow = document.getElementById("cashRow");
+  const changeRow = document.getElementById("changeRow");
+
+  if (method === "cash") {
+    cashRow.style.display = "block";
+    changeRow.style.display = "block";
+
+    const received = Number(
+      document.getElementById("cashReceived").value || 0
+    );
+
+    const difference = received - finalTotal;
+
+    document.getElementById("change").textContent =
+      difference >= 0
+        ? "Rs. " + difference.toFixed(2)
+        : "Due: Rs. " + Math.abs(difference).toFixed(2);
+  } else {
+    cashRow.style.display = "none";
+    changeRow.style.display = "none";
+  }
+}
 
 
   function clearBill() {
