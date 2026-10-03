@@ -181,48 +181,6 @@
 }
       
 @media print {
-  .print-hide {
-    display: none !important;
-  }
-
-  .qty button {
-    display: none !important;
-  }
-
-  .receipt-meta {
-    text-align: left;
-    margin: 0 0 12px 0;
-  }
-
-  .receipt-meta p {
-    margin: 0;
-  }
-
-  .payment-box select,
-  .payment-box input {
-    border: none !important;
-    background: transparent !important;
-    appearance: none;
-    padding: 0;
-  }
-}
-
-    @media print {
-  .section:not(.bill-section) {
-    display: none !important;
-  }
-  .menu-selection {
-  display: none !important;
-}
-  .category-btn,
-  .add-btn,
-  .qty button,
-  #items {
-    display: none !important;
-  }
-}
-    
-@media print {
 
   @page {
     size: 5in 7in;
@@ -234,21 +192,92 @@
     padding: 0 !important;
   }
 
+  /* Menu / Category print නොවෙන්න */
+  .menu-selection,
+  .section:not(.bill-section),
+  .category-btn,
+  .add-btn,
+  #items {
+    display: none !important;
+  }
+
+  /* Bill එකේ උඩ හිස් ඉඩ අඩු කිරීම */
   .bill-section {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .bill-section .section-title {
-    margin-top: 2px !important;
-    margin-bottom: 4px !important;
+    margin: 2px 0 4px 0 !important;
+    padding: 0 !important;
   }
 
+  /* Items 10ක් ගැළපෙන්න */
   .bill-row {
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 2px 0 !important;
     margin: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    break-inside: avoid;
+  }
+
+  .bill-row > div:first-child {
+    min-width: 0 !important;
+  }
+
+  .bill-row > div:last-child {
+    white-space: nowrap !important;
+    text-align: right !important;
+    font-size: 10px !important;
+  }
+
+  .bill-row .item-price {
+    font-size: 9px !important;
+    line-height: 1.1 !important;
+  }
+
+  /* + / - Print නොවෙන්න */
+  .qty button {
+    display: none !important;
+  }
+
+  .qty {
+    font-size: 10px !important;
+  }
+
+  /* Date එක ඉහළට */
+  .receipt-meta {
+    margin: 0 0 3px 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    font-size: 9px !important;
+  }
+
+  .receipt-meta p {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Payment කොටස compact */
+  .payment-box {
+    margin: 4px 0 0 0 !important;
+    padding: 3px 0 !important;
+    font-size: 10px !important;
+  }
+
+  .payment-box p {
+    margin: 2px 0 !important;
+  }
+
+  /* Print / Clear buttons print නොවෙන්න */
+  .print-btn,
+  .clear-btn {
+    display: none !important;
   }
 }
     
