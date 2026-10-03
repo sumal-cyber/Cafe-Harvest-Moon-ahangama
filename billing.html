@@ -193,11 +193,17 @@
     padding: 0 !important;
   }
 
-  .menu-selection,
-  .section:not(.bill-section),
+@media print {
+
+    .menu-selection {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  #items,
+  .categories,
   .category-btn,
-  .add-btn,
-  #items {
+  .add-btn {
     display: none !important;
   }
 
