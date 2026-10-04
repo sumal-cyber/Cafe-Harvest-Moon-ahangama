@@ -674,7 +674,30 @@ function updatePayment() {
       renderBill();
     }
   }
+  
+function updateBillDate() {
+  const now = new Date();
 
+  document.getElementById("billDate").textContent =
+    now.toLocaleString("en-LK", {
+      timeZone: "Asia/Colombo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+}
+
+// Billing එක open කරන විට දිනය හා වේලාව පෙන්වයි
+updateBillDate();
+
+// Print කරන මොහොතේ වේලාව නැවත යාවත්කාලීන කරයි
+window.addEventListener("beforeprint", updateBillDate);
+
+// විනාඩියකට වරක් වේලාව යාවත්කාලීන කරයි
+setInterval(updateBillDate, 60000);
 
   // Load real menu from Supabase
   loadMenu();
